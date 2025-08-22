@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch"
+    ],
+    "deny": [
+      "Read(**/.env*)",
+      "Edit(**/.env*)",
+      "Write(**/.env*)",
+      "Bash(**:.env*)"
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "npx ccusage statusline"
+  },
+  "outputStyle": "Explanatory"
+}

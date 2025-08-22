@@ -1,0 +1,124 @@
+import fs from 'fs-extra';
+import path from 'path';
+import { 
+  getTemplatesPath, 
+  createContentHash, 
+  contentContains, 
+  readTemplate,
+  getFilesInDirectory 
+} from './utils.js';
+
+/**
+ * Handle CLAUDE.md file creation or updating
+ */
+export async function handleClaudeMarkdown(targetDir) {
+  const claudeFile = path.join(targetDir, 'CLAUDE.md');
+  const templateContent = await readTemplate('CLAUDE.md');
+  const templateHash = createContentHash(templateContent);
+  
+  if (!(await fs.pathExists(claudeFile))) {
+    // File doesn't exist, create it
+    await fs.writeFile(claudeFile, templateContent);
+    return { action: 'created', details: 'Created new CLAUDE.md' };
+  }
+  
+  // File exists, check if it contains our template content
+  const existingContent = await fs.readFile(claudeFile, 'utf8');
+  const existingHash = createContentHash(existingContent);
+  
+  // Check if template content is already present
+  if (existingHash === templateHash || contentContains(existingContent, templateContent.trim())) {
+    return { action: 'skipped', details: 'CLAUDE.md already contains template content' };
+  }
+  
+  // Append template content under a heading
+  const heading = '\\n\\n# Claude Configuration\\n\\n';
+  const updatedContent = existingContent + heading + templateContent;
+  await fs.writeFile(claudeFile, updatedContent);
+  
+  return { action: 'updated', details: 'Appended template content to existing CLAUDE.md' };
+}
+
+/**
+ * Handle directory mirroring (create if not exists, skip if exists)
+ */
+export async function handleDirectoryMirror(targetDir, relativePath) {
+  const targetPath = path.join(targetDir, relativePath);
+  const templatePath = path.join(getTemplatesPath(), relativePath);
+  
+  if (await fs.pathExists(targetPath)) {
+    return { action: 'skipped', details: `Directory ${relativePath} already exists` };
+  }
+  
+  // Copy entire directory
+  await fs.copy(templatePath, targetPath);
+  return { action: 'created', details: `Created ${relativePath} directory` };
+}
+
+/**
+ * Handle selective file copying (add missing files only)
+ */
+export async function handleSelectiveFileCopy(targetDir, relativePath) {
+  const targetPath = path.join(targetDir, relativePath);
+  const templatePath = path.join(getTemplatesPath(), relativePath);
+  
+  if (!(await fs.pathExists(targetPath))) {
+    // Directory doesn't exist, create it with all template files
+    await fs.copy(templatePath, targetPath);
+    const files = await getFilesInDirectory(templatePath);
+    return { 
+      action: 'created', 
+      details: `Created ${relativePath} with ${files.length} files`,
+      filesAdded: files.length
+    };
+  }
+  
+  // Directory exists, check for missing files
+  const templateFiles = await getFilesInDirectory(templatePath);
+  const targetFiles = await getFilesInDirectory(targetPath);
+  const missingFiles = templateFiles.filter(file => !targetFiles.includes(file));
+  
+  if (missingFiles.length === 0) {
+    return { 
+      action: 'skipped', 
+      details: `All files in ${relativePath} are up to date`,
+      filesAdded: 0
+    };
+  }
+  
+  // Copy missing files
+  let copiedCount = 0;
+  for (const missingFile of missingFiles) {
+    const sourcePath = path.join(templatePath, missingFile);
+    const destPath = path.join(targetPath, missingFile);
+    
+    // Ensure destination directory exists
+    await fs.ensureDir(path.dirname(destPath));
+    await fs.copy(sourcePath, destPath);
+    copiedCount++;
+  }
+  
+  return { 
+    action: 'updated', 
+    details: `Added ${copiedCount} missing files to ${relativePath}`,
+    filesAdded: copiedCount
+  };
+}
+
+/**
+ * Handle single file copying (create if not exists, skip if exists)
+ */
+export async function handleSingleFile(targetDir, relativePath) {
+  const targetPath = path.join(targetDir, relativePath);
+  const templatePath = path.join(getTemplatesPath(), relativePath);
+  
+  if (await fs.pathExists(targetPath)) {
+    return { action: 'skipped', details: `File ${relativePath} already exists` };
+  }
+  
+  // Ensure target directory exists
+  await fs.ensureDir(path.dirname(targetPath));
+  await fs.copy(templatePath, targetPath);
+  
+  return { action: 'created', details: `Created ${relativePath}` };
+}
