@@ -1,6 +1,6 @@
 {
   "name": "claude-init",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Initialize Claude development environment with configurations and templates",
   "type": "module",
   "bin": {
@@ -43,10 +43,13 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git+https://github.com/ChrisLinn/claude-init.git"
   },
   "bugs": {
-    "url": ""
+    "url": "https://github.com/ChrisLinn/claude-init/issues"
   },
-  "homepage": ""
+  "homepage": "https://github.com/ChrisLinn/claude-init#readme",
+  "publishConfig": {
+    "access": "public"
+  }
 }
