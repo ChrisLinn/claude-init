@@ -28,7 +28,7 @@
     "initialization",
     "scaffolding"
   ],
-  "author": "",
+  "author": "ChrisLinn <nanyishanshaoxiu@gmail.com>",
   "license": "MIT",
   "engines": {
     "node": ">=16.0.0"
