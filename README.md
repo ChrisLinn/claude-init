@@ -29,7 +29,7 @@ This will set up your current directory with:
 
 #### 📄 CLAUDE.md
 - **If missing**: Creates new file with template content
-- **If exists**: Appends template content under "# Claude Configuration" heading
+- **If exists**: Appends template content under "# Claude Scratchpad Rules" heading
 - **If already contains template**: Skips to preserve your content
 
 #### 📁 .devcontainer

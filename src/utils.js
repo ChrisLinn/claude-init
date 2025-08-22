@@ -10,7 +10,8 @@ const __dirname = path.dirname(__filename);
  * Get the absolute path to the templates directory
  */
 export function getTemplatesPath() {
-  return path.join(__dirname, '..', 'templates');
+  // return path.join(__dirname, '..', 'templates');
+  return path.join(__dirname, '..');
 }
 
 /**

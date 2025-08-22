@@ -36,7 +36,7 @@ describe('Claude Init Tests', () => {
     
     test('skips when CLAUDE.md already contains template content', async () => {
       // Create file with template content
-      const templateContent = await fs.readFile(join(process.cwd(), 'templates', 'CLAUDE.md'), 'utf8');
+      const templateContent = await fs.readFile(join(process.cwd(), 'CLAUDE.md'), 'utf8');
       await fs.writeFile(join(tempDir, 'CLAUDE.md'), templateContent);
       
       const result = await handleClaudeMarkdown(tempDir);
@@ -54,7 +54,7 @@ describe('Claude Init Tests', () => {
       
       const content = await fs.readFile(join(tempDir, 'CLAUDE.md'), 'utf8');
       assert(content.includes('My Project'));
-      assert(content.includes('Claude Configuration'));
+      assert(content.includes('Claude Scratchpad Rules'));
       assert(content.includes('During you interaction with the user'));
     });
   });

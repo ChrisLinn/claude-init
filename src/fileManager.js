@@ -32,7 +32,7 @@ export async function handleClaudeMarkdown(targetDir) {
   }
   
   // Append template content under a heading
-  const heading = '\\n\\n# Claude Configuration\\n\\n';
+  const heading = '\\n\\n# Claude Scratchpad Rules\\n\\n';
   const updatedContent = existingContent + heading + templateContent;
   await fs.writeFile(claudeFile, updatedContent);
   

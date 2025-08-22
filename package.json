@@ -10,7 +10,9 @@
   "files": [
     "bin/",
     "src/",
-    "templates/"
+    "CLAUDE.md",
+    ".claude/",
+    ".devcontainer/"
   ],
   "scripts": {
     "test": "node --test test/*.test.js",
