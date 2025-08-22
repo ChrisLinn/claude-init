@@ -18,7 +18,8 @@
       "extensions": [
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
-        "eamodio.gitlens"
+        "eamodio.gitlens",
+        "anthropic.claude-code"
       ],
       "settings": {
         "editor.formatOnSave": true,
