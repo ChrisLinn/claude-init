@@ -54,7 +54,7 @@ describe('Claude Init Tests', () => {
       
       const content = await fs.readFile(join(tempDir, 'CLAUDE.md'), 'utf8');
       assert(content.includes('My Project'));
-      assert(content.includes('Claude Scratchpad Rules'));
+      assert(content.includes('# CLAUDE.md'));
       assert(content.includes('During you interaction with the user'));
     });
   });

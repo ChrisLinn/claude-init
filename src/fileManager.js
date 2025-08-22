@@ -31,9 +31,23 @@ export async function handleClaudeMarkdown(targetDir) {
     return { action: 'skipped', details: 'CLAUDE.md already contains template content' };
   }
   
-  // Append template content under a heading
-  const heading = '\\n\\n# Claude Scratchpad Rules\\n\\n';
-  const updatedContent = existingContent + heading + templateContent;
+  // Look for existing "# CLAUDE.md" heading
+  const claudeHeadingRegex = /^# CLAUDE\.md\s*$/m;
+  const headingMatch = existingContent.match(claudeHeadingRegex);
+  
+  let updatedContent;
+  if (headingMatch) {
+    // Found existing heading, add template content right below it
+    const headingIndex = headingMatch.index + headingMatch[0].length;
+    const beforeHeading = existingContent.substring(0, headingIndex);
+    const afterHeading = existingContent.substring(headingIndex);
+    updatedContent = beforeHeading + '\n\n' + templateContent + afterHeading;
+  } else {
+    // No heading found, add one at the beginning with template content
+    const heading = '# CLAUDE.md\n\n';
+    updatedContent = heading + templateContent + '\n\n' + existingContent;
+  }
+  
   await fs.writeFile(claudeFile, updatedContent);
   
   return { action: 'updated', details: 'Appended template content to existing CLAUDE.md' };
