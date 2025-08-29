@@ -1,3 +1,5 @@
-ultrathink, help me debug and fix:
+ultrathink.
+
+Help me debug and fix:
 
 $ARGUMENTS
