@@ -95,6 +95,7 @@ your-project/
     ├── settings.json            # Claude settings
     ├── commands/                # Custom commands
     │   ├── commit.md
+    │   ├── continue-tasks.md
     │   ├── debug.md
     │   ├── gogogo.md
     │   ├── impl-planning.md
