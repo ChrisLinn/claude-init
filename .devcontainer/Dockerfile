@@ -58,6 +58,10 @@ RUN ARCH=$(dpkg --print-architecture) && \
 # Set up non-root user
 USER node
 
+# Install uv for Python package management and ensure it is on PATH
+ENV PATH=/home/node/.local/bin:$PATH
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+
 # Install global packages
 ENV NPM_CONFIG_PREFIX=/usr/local/share/npm-global
 ENV PATH=$PATH:/usr/local/share/npm-global/bin
