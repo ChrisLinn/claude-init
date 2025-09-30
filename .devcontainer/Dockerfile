@@ -24,6 +24,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   dnsutils \
   aggregate \
   jq \
+  curl \
+  python3 \
+  python3-pip \
+  python3-venv \
+  python-is-python3 \
   nano \
   vim \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
