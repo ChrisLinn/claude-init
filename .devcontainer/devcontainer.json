@@ -1,5 +1,5 @@
 {
-  "name": "Claude Code Sandbox",
+  "name": "claude-init",
   "build": {
     "dockerfile": "Dockerfile",
     "args": {
