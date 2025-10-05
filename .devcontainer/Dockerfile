@@ -87,6 +87,8 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
 RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
 # Install Codex
 RUN npm install -g @openai/codex@${CODEX_VERSION}
+# Install spec-kit
+RUN uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
 
 
 # Copy and set up firewall script
