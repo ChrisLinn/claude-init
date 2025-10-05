@@ -80,29 +80,29 @@ describe('Claude Init Tests', () => {
   describe('Selective file copying', () => {
     test('creates directory with all files when it does not exist', async () => {
       const result = await handleSelectiveFileCopy(tempDir, '.claude/commands');
-      
+
       assert.strictEqual(result.action, 'created');
       assert(await fs.pathExists(join(tempDir, '.claude/commands')));
-      assert(await fs.pathExists(join(tempDir, '.claude/commands', 'plan.md')));
+      assert(await fs.pathExists(join(tempDir, '.claude/commands', 'debug.md')));
       assert(result.filesAdded > 0);
     });
     
     test('adds missing files to existing directory', async () => {
       // Create directory with some files
       await fs.mkdir(join(tempDir, '.claude/commands'), { recursive: true });
-      await fs.writeFile(join(tempDir, '.claude/commands', 'plan.md'), 'existing content');
-      
+      await fs.writeFile(join(tempDir, '.claude/commands', 'debug.md'), 'existing content');
+
       const result = await handleSelectiveFileCopy(tempDir, '.claude/commands');
-      
+
       assert.strictEqual(result.action, 'updated');
       assert(result.filesAdded > 0);
-      
+
       // Original file should still exist with original content
-      const content = await fs.readFile(join(tempDir, '.claude/commands', 'plan.md'), 'utf8');
+      const content = await fs.readFile(join(tempDir, '.claude/commands', 'debug.md'), 'utf8');
       assert.strictEqual(content, 'existing content');
-      
+
       // New files should be added
-      assert(await fs.pathExists(join(tempDir, '.claude/commands', 'debug.md')));
+      assert(await fs.pathExists(join(tempDir, '.claude/commands', 'commit.md')));
     });
     
     test('skips when all files are present', async () => {
