@@ -25,6 +25,6 @@ Additionally, maintain the following principles throughout your work process:
 1. Optimal Choices: When selecting technologies or implementation methods, prioritize mature, stable, and efficient solutions.
 2. Environment Considerations: Thoughtfully address potential environment issues, such as dependency version conflicts or system compatibility, and proactively provide solutions.
 
-Now, no need to code, read through and understand the codebase and give me a detailed plan on:
+Now, no need to start implementing, just read through and understand the codebase and give me a detailed plan on:
 
 $ARGUMENTS
