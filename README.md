@@ -97,9 +97,9 @@ your-project/
     │   ├── commit.md
     │   ├── continue-tasks.md
     │   ├── debug.md
-    │   ├── gogogo.md
+    │   ├── gen-todolist.md
     │   ├── impl-planning.md
-    │   ├── plan.md
+    │   ├── planning.md
     │   ├── prompt-enhancement.md
     │   ├── review-plan.md
     │   └── security-review.md
