@@ -94,17 +94,7 @@ your-project/
 └── .claude/
     ├── settings.json            # Claude settings
     ├── commands/                # Custom commands
-    │   ├── commit.md
-    │   ├── continue-tasks.md
-    │   ├── debug.md
-    │   ├── gen-todolist.md
-    │   ├── impl-planning.md
-    │   ├── planning.md
-    │   ├── prompt-enhancement.md
-    │   ├── review-plan.md
-    │   └── security-review.md
     └── agents/                  # Specialized agents
-        └── library-usage-researcher.md
 ```
 
 ## Development
