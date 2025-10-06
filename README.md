@@ -2,9 +2,6 @@
 
 A CLI tool to initialize Claude development environment with standardized configurations and templates.
 
-## 2025.10.06 update
-[Most of the previous "planning-and-act" commands have been replaced by `spec-kit`](https://github.com/ChrisLinn/claude-init/commit/2c3f7db69516c9a3255d8274c941693953b82ef3).
-
 ## Features
 
 - **Smart Setup**: Automatically detects existing files and only creates/updates what's needed
@@ -98,7 +95,11 @@ your-project/
     ├── settings.json            # Claude settings
     ├── commands/                # Custom commands
     │   ├── commit.md
+    │   ├── continue-tasks.md
     │   ├── debug.md
+    │   ├── gogogo.md
+    │   ├── impl-planning.md
+    │   ├── plan.md
     │   ├── prompt-enhancement.md
     │   ├── review-plan.md
     │   └── security-review.md
