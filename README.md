@@ -2,6 +2,9 @@
 
 A CLI tool to initialize Claude development environment with standardized configurations and templates.
 
+## 2025.10.06 update
+[Most of the previous "planning-and-act" commands have been replaced by `spec-kit`](https://github.com/ChrisLinn/claude-init/commit/2c3f7db69516c9a3255d8274c941693953b82ef3).
+
 ## Features
 
 - **Smart Setup**: Automatically detects existing files and only creates/updates what's needed
@@ -36,7 +39,7 @@ A CLI tool to initialize Claude development environment with standardized config
 Running `npx claude-init` sets up your current directory with:
 
 - `CLAUDE.md` - Project instructions and scratchpad for Claude
-- `.devcontainer/` - Development container configuration
+- `.devcontainer/` - Development container configuration (also added `codex-cli` and `spec-kit`.)
 - `.claude/settings.json` - Claude-specific settings
 - `.claude/commands/` - Custom Claude commands
 - `.claude/agents/` - Specialized agent configurations
@@ -95,11 +98,7 @@ your-project/
     ├── settings.json            # Claude settings
     ├── commands/                # Custom commands
     │   ├── commit.md
-    │   ├── continue-tasks.md
     │   ├── debug.md
-    │   ├── gogogo.md
-    │   ├── impl-planning.md
-    │   ├── plan.md
     │   ├── prompt-enhancement.md
     │   ├── review-plan.md
     │   └── security-review.md
