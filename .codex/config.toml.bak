@@ -1,2 +1,10 @@
 model = "gpt-5"
 model_reasoning_effort = "high"
+model_reasoning_summary = "detailed" 
+approval_policy = "never" 
+sandbox_mode = "danger-full-access" 
+network_access = true  
+
+[shell_environment_policy] 
+inherit = "all" 
+ignore_default_excludes = false
