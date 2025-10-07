@@ -1,7 +1,7 @@
 model = "gpt-5"
 model_reasoning_effort = "high"
 model_reasoning_summary = "detailed" 
-approval_policy = "never" 
+approval_policy = "on-failure" # "never"
 sandbox_mode = "workspace-write" # "danger-full-access" 
 network_access = true  
 
