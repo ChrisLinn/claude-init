@@ -2,7 +2,7 @@ model = "gpt-5"
 model_reasoning_effort = "high"
 model_reasoning_summary = "detailed" 
 approval_policy = "never" 
-sandbox_mode = "danger-full-access" 
+sandbox_mode = "workspace-write" # "danger-full-access" 
 network_access = true  
 
 [shell_environment_policy] 
