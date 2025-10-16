@@ -182,14 +182,33 @@ describe('Claude Init Tests', () => {
     test('skips when file already exists', async () => {
       await fs.mkdir(join(tempDir, '.claude'), { recursive: true });
       await fs.writeFile(join(tempDir, '.claude/settings.json'), '{"existing": true}');
-      
+
       const result = await handleSingleFile(tempDir, '.claude/settings.json');
-      
+
       assert.strictEqual(result.action, 'skipped');
-      
+
       // Original content should be preserved
       const content = await fs.readFile(join(tempDir, '.claude/settings.json'), 'utf8');
       assert(content.includes('"existing": true'));
+    });
+
+    test('overwrites settings.json when overwrite option is true', async () => {
+      // Create custom settings file
+      await fs.mkdir(join(tempDir, '.claude'), { recursive: true });
+      await fs.writeFile(join(tempDir, '.claude/settings.json'), '{"custom": "settings"}');
+
+      // Read template content for comparison
+      const templateContent = await fs.readFile(join(process.cwd(), '.claude/settings.json'), 'utf8');
+
+      // Call with overwrite option
+      const result = await handleSingleFile(tempDir, '.claude/settings.json', { overwrite: true });
+
+      assert.strictEqual(result.action, 'updated');
+      assert(result.details.includes('Overwrote'));
+
+      // File should now have template content
+      const content = await fs.readFile(join(tempDir, '.claude/settings.json'), 'utf8');
+      assert.strictEqual(content, templateContent);
     });
   });
 });

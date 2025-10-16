@@ -151,19 +151,30 @@ export async function handleSelectiveFileCopy(targetDir, relativePath, options =
 }
 
 /**
- * Handle single file copying (create if not exists, skip if exists)
+ * Handle single file copying (create if not exists, skip if exists, optionally overwrite)
+ * @param {string} targetDir - The target directory
+ * @param {string} relativePath - The relative path of the file to copy
+ * @param {Object} options - Options for the copy operation
+ * @param {boolean} options.overwrite - Whether to overwrite existing file (default: false)
  */
-export async function handleSingleFile(targetDir, relativePath) {
+export async function handleSingleFile(targetDir, relativePath, options = {}) {
+  const { overwrite = false } = options;
   const targetPath = path.join(targetDir, relativePath);
   const templatePath = path.join(getTemplatesPath(), relativePath);
-  
+
   if (await fs.pathExists(targetPath)) {
-    return { action: 'skipped', details: `File ${relativePath} already exists` };
+    if (!overwrite) {
+      return { action: 'skipped', details: `File ${relativePath} already exists` };
+    }
+
+    // Overwrite existing file
+    await fs.copy(templatePath, targetPath);
+    return { action: 'updated', details: `Overwrote ${relativePath} with template` };
   }
-  
+
   // Ensure target directory exists
   await fs.ensureDir(path.dirname(targetPath));
   await fs.copy(templatePath, targetPath);
-  
+
   return { action: 'created', details: `Created ${relativePath}` };
 }

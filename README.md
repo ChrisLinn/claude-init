@@ -57,7 +57,10 @@ Running `npx claude-init` sets up your current directory with:
 
 #### ⚙️ .claude/settings.json
 - **If missing**: Creates with default Claude settings
-- **If exists**: Skips to preserve your custom settings
+- **If exists**: Prompts whether to overwrite with template version
+- **Interactive prompt**: If the file exists, you'll be asked whether to overwrite it
+  - Answer **Yes** to replace with fresh template
+  - Answer **No** (default) to preserve your custom settings
 
 #### 📋 .claude/commands
 - **If missing**: Creates with all template files
@@ -75,19 +78,26 @@ Running `npx claude-init` sets up your current directory with:
 
 When running interactively (in a terminal), `claude-init` will ask you:
 
-1. **Overwrite existing .claude/commands/\*.md?** (only if you have existing `.md` files that match templates)
+1. **Overwrite existing .claude/settings.json?** (only if the file already exists)
+   - Prompt: `Overwrite existing .claude/settings.json with template version? (y/N):`
+   - Default: **No** (preserves your custom settings)
+   - If **Yes**: Replaces your settings file with fresh template
+   - If **No**: Keeps your existing settings file
+
+2. **Overwrite existing .claude/commands/\*.md?** (only if you have existing `.md` files that match templates)
    - Prompt: `Overwrite existing .claude/commands/*.md with template versions? (y/N):`
    - Default: **No** (preserves your customizations)
    - If **Yes**: Replaces existing `.md` files with templates, still adds missing files
    - If **No**: Keeps your existing files, only adds missing files
 
-2. **Install .claude/agents?**
+3. **Install .claude/agents?**
    - Prompt: `Install .claude/agents files? (Y/n):`
    - Default: **Yes** (installs agents)
    - If **Yes**: Installs/updates agents as normal
    - If **No**: Skips agents entirely (shown in summary)
 
 **Non-interactive mode (CI/scripts)**: When `process.stdin.isTTY` is false (e.g., in CI pipelines), prompts are skipped and defaults are used:
+- `.claude/settings.json` is **not** overwritten (preserves custom settings)
 - `.claude/commands/*.md` files are **not** overwritten (preserves customizations)
 - `.claude/agents` **is** installed (matches current behavior)
 
@@ -122,6 +132,7 @@ Initializing in: /path/to/your/project
 
 Overwrite existing .claude/commands/*.md with template versions? (y/N): n
 Install .claude/agents files? (Y/n): n
+Overwrite existing .claude/settings.json with template version? (y/N): n
 
 - CLAUDE.md already contains template content
 - Directory .devcontainer already exists

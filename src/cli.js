@@ -52,6 +52,16 @@ export async function cli() {
   console.log(chalk.gray(`Initializing in: ${targetDir}`));
   console.log();
 
+  // Determine if we should overwrite .claude/settings.json
+  let overwriteSettings = false;
+  const settingsPath = path.join(targetDir, '.claude/settings.json');
+  if (await fs.pathExists(settingsPath)) {
+    overwriteSettings = await promptYesNo(
+      'Overwrite existing .claude/settings.json with template version?',
+      false
+    );
+  }
+
   // Determine if we should prompt for overwriting .claude/commands/*.md
   let overwriteCommandsMd = false;
   const commandsTargetPath = path.join(targetDir, '.claude/commands');
@@ -90,7 +100,7 @@ export async function cli() {
     },
     {
       name: '.claude/settings.json',
-      handler: () => handleSingleFile(targetDir, '.claude/settings.json')
+      handler: () => handleSingleFile(targetDir, '.claude/settings.json', { overwrite: overwriteSettings })
     },
     {
       name: '.claude/commands',
