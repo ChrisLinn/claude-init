@@ -7,7 +7,7 @@
       "Read(**/.env*)",
       "Edit(**/.env*)",
       "Write(**/.env*)",
-      "Bash(**:.env*)"
+      "Bash(*.env*)"
     ],
     "defaultMode": "acceptEdits"
   },
