@@ -8,7 +8,8 @@
       "Edit(**/.env*)",
       "Write(**/.env*)",
       "Bash(**:.env*)"
-    ]
+    ],
+    "defaultMode": "acceptEdits"
   },
   "statusLine": {
     "type": "command",

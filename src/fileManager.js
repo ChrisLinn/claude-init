@@ -70,53 +70,84 @@ export async function handleDirectoryMirror(targetDir, relativePath) {
 }
 
 /**
- * Handle selective file copying (add missing files only)
+ * Handle selective file copying (add missing files only, optionally overwrite existing)
+ * @param {string} targetDir - The target directory
+ * @param {string} relativePath - The relative path to copy
+ * @param {Object} options - Options for the copy operation
+ * @param {boolean} options.overwriteExisting - Whether to overwrite existing files (default: false)
+ * @param {function} options.filter - Function to filter which files to overwrite (default: all files)
  */
-export async function handleSelectiveFileCopy(targetDir, relativePath) {
+export async function handleSelectiveFileCopy(targetDir, relativePath, options = {}) {
+  const { overwriteExisting = false, filter = () => true } = options;
   const targetPath = path.join(targetDir, relativePath);
   const templatePath = path.join(getTemplatesPath(), relativePath);
-  
+
   if (!(await fs.pathExists(targetPath))) {
     // Directory doesn't exist, create it with all template files
     await fs.copy(templatePath, targetPath);
     const files = await getFilesInDirectory(templatePath);
-    return { 
-      action: 'created', 
+    return {
+      action: 'created',
       details: `Created ${relativePath} with ${files.length} files`,
       filesAdded: files.length
     };
   }
-  
-  // Directory exists, check for missing files
+
+  // Directory exists, check for missing files and optionally overwrite existing
   const templateFiles = await getFilesInDirectory(templatePath);
   const targetFiles = await getFilesInDirectory(targetPath);
   const missingFiles = templateFiles.filter(file => !targetFiles.includes(file));
-  
-  if (missingFiles.length === 0) {
-    return { 
-      action: 'skipped', 
+
+  let filesAdded = 0;
+  let filesOverwritten = 0;
+
+  // Copy missing files
+  for (const missingFile of missingFiles) {
+    const sourcePath = path.join(templatePath, missingFile);
+    const destPath = path.join(targetPath, missingFile);
+
+    // Ensure destination directory exists
+    await fs.ensureDir(path.dirname(destPath));
+    await fs.copy(sourcePath, destPath);
+    filesAdded++;
+  }
+
+  // Optionally overwrite existing files that match filter
+  if (overwriteExisting) {
+    const existingFiles = templateFiles.filter(file => targetFiles.includes(file) && filter(file));
+
+    for (const existingFile of existingFiles) {
+      const sourcePath = path.join(templatePath, existingFile);
+      const destPath = path.join(targetPath, existingFile);
+
+      // Ensure destination directory exists
+      await fs.ensureDir(path.dirname(destPath));
+      await fs.copy(sourcePath, destPath);
+      filesOverwritten++;
+    }
+  }
+
+  if (filesAdded === 0 && filesOverwritten === 0) {
+    return {
+      action: 'skipped',
       details: `All files in ${relativePath} are up to date`,
       filesAdded: 0
     };
   }
-  
-  // Copy missing files
-  let copiedCount = 0;
-  for (const missingFile of missingFiles) {
-    const sourcePath = path.join(templatePath, missingFile);
-    const destPath = path.join(targetPath, missingFile);
-    
-    // Ensure destination directory exists
-    await fs.ensureDir(path.dirname(destPath));
-    await fs.copy(sourcePath, destPath);
-    copiedCount++;
-  }
-  
-  return { 
-    action: 'updated', 
-    details: `Added ${copiedCount} missing files to ${relativePath}`,
-    filesAdded: copiedCount
+
+  const result = {
+    action: 'updated',
+    filesAdded
   };
+
+  if (overwriteExisting && filesOverwritten > 0) {
+    result.filesOverwritten = filesOverwritten;
+    result.details = `Added ${filesAdded} missing files, overwritten ${filesOverwritten} files in ${relativePath}`;
+  } else {
+    result.details = `Added ${filesAdded} missing files to ${relativePath}`;
+  }
+
+  return result;
 }
 
 /**

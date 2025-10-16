@@ -108,12 +108,66 @@ describe('Claude Init Tests', () => {
     test('skips when all files are present', async () => {
       // First run to create all files
       await handleSelectiveFileCopy(tempDir, '.claude/commands');
-      
+
       // Second run should skip
       const result = await handleSelectiveFileCopy(tempDir, '.claude/commands');
-      
+
       assert.strictEqual(result.action, 'skipped');
       assert.strictEqual(result.filesAdded, 0);
+    });
+
+    test('overwrites existing files when overwriteExisting is true', async () => {
+      // Create directory with custom content
+      await fs.mkdir(join(tempDir, '.claude/commands'), { recursive: true });
+      await fs.writeFile(join(tempDir, '.claude/commands', 'debug.md'), 'custom content');
+
+      // Read template content for comparison
+      const templateContent = await fs.readFile(join(process.cwd(), '.claude/commands', 'debug.md'), 'utf8');
+
+      const result = await handleSelectiveFileCopy(tempDir, '.claude/commands', {
+        overwriteExisting: true,
+        filter: (relPath) => relPath.endsWith('.md')
+      });
+
+      assert.strictEqual(result.action, 'updated');
+      assert(result.filesOverwritten >= 1, 'Should have overwritten at least one file');
+
+      // File should now have template content
+      const content = await fs.readFile(join(tempDir, '.claude/commands', 'debug.md'), 'utf8');
+      assert.strictEqual(content, templateContent);
+    });
+
+    test('filter limits which files are overwritten', async () => {
+      // Create directory with custom .md and .txt files
+      await fs.mkdir(join(tempDir, '.claude/commands'), { recursive: true });
+      await fs.writeFile(join(tempDir, '.claude/commands', 'debug.md'), 'custom md content');
+      await fs.writeFile(join(tempDir, '.claude/commands', 'test.txt'), 'custom txt content');
+
+      const result = await handleSelectiveFileCopy(tempDir, '.claude/commands', {
+        overwriteExisting: true,
+        filter: (relPath) => relPath.endsWith('.md')
+      });
+
+      assert.strictEqual(result.action, 'updated');
+
+      // .txt file should keep custom content (not overwritten)
+      if (await fs.pathExists(join(tempDir, '.claude/commands', 'test.txt'))) {
+        const txtContent = await fs.readFile(join(tempDir, '.claude/commands', 'test.txt'), 'utf8');
+        assert.strictEqual(txtContent, 'custom txt content');
+      }
+    });
+
+    test('default behavior preserves existing files without overwrite option', async () => {
+      // Create directory with custom content
+      await fs.mkdir(join(tempDir, '.claude/commands'), { recursive: true });
+      await fs.writeFile(join(tempDir, '.claude/commands', 'debug.md'), 'custom content');
+
+      // Call without overwrite option (default behavior)
+      await handleSelectiveFileCopy(tempDir, '.claude/commands');
+
+      // Should add missing files but not overwrite existing
+      const content = await fs.readFile(join(tempDir, '.claude/commands', 'debug.md'), 'utf8');
+      assert.strictEqual(content, 'custom content');
     });
   });
   
