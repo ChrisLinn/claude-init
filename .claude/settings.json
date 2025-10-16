@@ -9,7 +9,10 @@
       "Write(**/.env*)",
       "Bash(*.env*)"
     ],
-    "defaultMode": "acceptEdits"
+    "defaultMode": "acceptEdits",
+    "additionalDirectories": [
+      "/tmp"
+    ]
   },
   "statusLine": {
     "type": "command",
