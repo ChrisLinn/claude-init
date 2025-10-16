@@ -17,7 +17,12 @@
   "scripts": {
     "test": "node --test test/*.test.js",
     "dev": "node bin/index.js",
-    "prepublishOnly": "npm test"
+    "prepublishOnly": "npm test",
+    "version": "git add package.json",
+    "postversion": "git push && git push --tags && npm publish",
+    "release:patch": "npm version patch",
+    "release:minor": "npm version minor",
+    "release:major": "npm version major"
   },
   "keywords": [
     "claude",
