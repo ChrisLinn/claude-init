@@ -102,7 +102,7 @@ describe('Claude Init Tests', () => {
       assert.strictEqual(content, 'existing content');
 
       // New files should be added
-      assert(await fs.pathExists(join(tempDir, '.claude/commands', 'commit.md')));
+      assert(await fs.pathExists(join(tempDir, '.claude/commands', 'simple-planning.md')));
     });
     
     test('skips when all files are present', async () => {
