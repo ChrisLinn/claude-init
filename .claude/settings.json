@@ -17,5 +17,5 @@
     "type": "command",
     "command": "npx ccusage statusline"
   },
-  "outputStyle": "Explanatory"
+  "alwaysThinkingEnabled": true
 }
