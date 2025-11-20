@@ -58,7 +58,7 @@ export async function cli() {
   if (await fs.pathExists(settingsPath)) {
     overwriteSettings = await promptYesNo(
       'Overwrite existing .claude/settings.json with template version?',
-      false
+      true
     );
   }
 
@@ -78,7 +78,7 @@ export async function cli() {
     if (hasOverlappingMd) {
       overwriteCommandsMd = await promptYesNo(
         'Overwrite existing .claude/commands/*.md with template versions?',
-        false
+        true
       );
     }
   }
@@ -86,7 +86,7 @@ export async function cli() {
   // Determine if we should install .claude/agents
   const includeAgents = await promptYesNo(
     'Install .claude/agents files?',
-    true
+    false
   );
 
   const tasks = [
