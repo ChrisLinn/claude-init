@@ -101,8 +101,8 @@ export async function cli() {
     'js'
   );
 
-  // Map devcontainer variant to directory name
-  const devcontainerMap = {
+  // Map devcontainer variant to source directory name in templates
+  const devcontainerSourceMap = {
     'js': '.devcontainer',
     'go': '.devcontainer-go',
     'rust': '.devcontainer-rust'
@@ -128,10 +128,30 @@ export async function cli() {
 
   // Conditionally add devcontainer task
   if (devcontainerVariant !== 'none') {
-    const devcontainerDir = devcontainerMap[devcontainerVariant];
+    const sourceDir = devcontainerSourceMap[devcontainerVariant];
     tasks.splice(1, 0, {
-      name: devcontainerDir,
-      handler: () => handleDirectoryMirror(targetDir, devcontainerDir)
+      name: '.devcontainer',
+      handler: async () => {
+        const targetPath = path.join(targetDir, '.devcontainer');
+        const templatePath = path.join(getTemplatesPath(), sourceDir);
+
+        const exists = await fs.pathExists(targetPath);
+
+        // Remove existing .devcontainer if it exists
+        if (exists) {
+          await fs.remove(targetPath);
+        }
+
+        // Copy from selected source to .devcontainer
+        await fs.copy(templatePath, targetPath);
+
+        return {
+          action: exists ? 'updated' : 'created',
+          details: exists
+            ? `Overwrote .devcontainer with ${devcontainerVariant} configuration`
+            : `Created .devcontainer with ${devcontainerVariant} configuration`
+        };
+      }
     });
   }
 
