@@ -8,7 +8,7 @@ import {
   handleSelectiveFileCopy,
   handleSingleFile
 } from './fileManager.js';
-import { promptYesNo } from './prompt.js';
+import { promptYesNo, promptChoice } from './prompt.js';
 import { getTemplatesPath, getFilesInDirectory } from './utils.js';
 
 /**
@@ -89,14 +89,29 @@ export async function cli() {
     false
   );
 
+  // Determine which devcontainer configuration to install
+  const devcontainerVariant = await promptChoice(
+    'Which devcontainer configuration to install?',
+    [
+      { value: 'js', label: 'JavaScript/TypeScript' },
+      { value: 'go', label: 'Go' },
+      { value: 'rust', label: 'Rust' },
+      { value: 'none', label: 'Skip devcontainer installation' }
+    ],
+    'js'
+  );
+
+  // Map devcontainer variant to directory name
+  const devcontainerMap = {
+    'js': '.devcontainer',
+    'go': '.devcontainer-go',
+    'rust': '.devcontainer-rust'
+  };
+
   const tasks = [
     {
       name: 'CLAUDE.md',
       handler: () => handleClaudeMarkdown(targetDir)
-    },
-    {
-      name: '.devcontainer',
-      handler: () => handleDirectoryMirror(targetDir, '.devcontainer')
     },
     {
       name: '.claude/settings.json',
@@ -110,6 +125,15 @@ export async function cli() {
       })
     }
   ];
+
+  // Conditionally add devcontainer task
+  if (devcontainerVariant !== 'none') {
+    const devcontainerDir = devcontainerMap[devcontainerVariant];
+    tasks.splice(1, 0, {
+      name: devcontainerDir,
+      handler: () => handleDirectoryMirror(targetDir, devcontainerDir)
+    });
+  }
 
   // Conditionally add .claude/agents task
   if (includeAgents) {
@@ -158,6 +182,10 @@ export async function cli() {
   
   if (totalActions.filesAdded > 0) {
     console.log(chalk.cyan(`   Files added: ${totalActions.filesAdded}`));
+  }
+
+  if (devcontainerVariant === 'none') {
+    console.log(chalk.gray(`   - devcontainer skipped by user`));
   }
 
   if (!includeAgents) {
