@@ -12,7 +12,9 @@
     "src/",
     "CLAUDE.md",
     ".claude/",
-    ".devcontainer/"
+    ".devcontainer/",
+    ".devcontainer-rust/",
+    ".devcontainer-go/"
   ],
   "scripts": {
     "test": "node --test test/*.test.js",
