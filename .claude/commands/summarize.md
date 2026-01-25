@@ -1,0 +1,1 @@
+npx -y @steipete/summarize "$ARGUMENTS" --length xl
