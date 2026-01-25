@@ -1,1 +1,1 @@
-npx -y @steipete/summarize "$ARGUMENTS" --length xl
+!npx -y @steipete/summarize "$ARGUMENTS" --length xl
