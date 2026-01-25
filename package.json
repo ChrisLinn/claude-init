@@ -22,9 +22,9 @@
     "prepublishOnly": "npm test",
     "version": "git add package.json",
     "postversion": "git push && git push --tags && npm publish",
-    "release:patch": "npm version patch",
-    "release:minor": "npm version minor",
-    "release:major": "npm version major"
+    "release:patch": "npm login && npm version patch",
+    "release:minor": "npm login && npm version minor",
+    "release:major": "npm login && npm version major"
   },
   "keywords": [
     "claude",
