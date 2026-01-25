@@ -1,1 +1,1 @@
-!sed -i '' 's/ultrathink/think harder/g' .claude/commands/*.md && mkdir -p ~/.codex/prompts && cp .claude/commands/*.md ~/.codex/prompts/
+!sed -i '' 's/ultrathink/think harder/g' .claude/commands/*.md && mkdir -p ~/.codex/prompts && cp .claude/commands/*.md ~/.codex/prompts/ && sed -i '' 's/think harder/ultrathink/g' .claude/commands/*.md
