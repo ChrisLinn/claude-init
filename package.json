@@ -1,6 +1,6 @@
 {
   "name": "claude-init",
-  "version": "1.0.50",
+  "version": "1.0.51",
   "description": "Initialize Claude development environment with configurations and templates",
   "type": "module",
   "bin": {
