@@ -1,1 +1,1 @@
-generate git PR title and description for $ARGUMENTS
+generate git PR title and description for $ARGUMENTS in markdown format
